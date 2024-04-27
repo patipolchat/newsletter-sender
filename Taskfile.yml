@@ -1,0 +1,39 @@
+version: '3'
+
+env:
+  APP_NAME: "es-assignment"
+tasks:
+  setup-db:
+    desc: "Setup the database"
+    cmds:
+      - echo "Setting up the database"
+      - docker run --name $APP_NAME -p 5432:5432 -e POSTGRES_PASSWORD=123456 -e POSTGRES_DB=$APP_NAME -d postgres:alpine
+      - echo "Database setup complete"
+  remove-db:
+    desc: "Remove the database"
+    cmds:
+      - echo "Removing the database"
+      - docker stop $APP_NAME
+      - docker rm $APP_NAME
+      - echo "Database removed"
+  create-migrate:
+    desc: "Create a migration"
+    cmds:
+      - echo "Creating a migration"
+      - docker run --rm -v $(pwd)/db/migrations:/migrations --network host migrate/migrate create -ext sql -dir ./migrations -seq {{.CLI_ARGS}}
+      - echo "Migration created"  
+  gen:
+    desc: "Generate All"
+    cmds:
+      - echo "Generating SQLC"
+      - docker run --rm -v $(pwd):/src -w /src sqlc/sqlc generate
+      - echo "SQLC generated"
+      - echo "Generating Mocks"
+      - mockery
+      - echo "Mocks generated"
+  run:
+    desc: "Run the application"
+    cmds:
+      - echo "Running the application"
+      - go run . {{.CLI_ARGS}}
+  
