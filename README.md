@@ -20,7 +20,9 @@
 3. Migrate DB - `task run -- migrate up` or `go run . migrate up`
 4. Generate sqlc, mockery - `task gen`
 5. Serve Http Server with cobra command - `task run -- serveApi` or `go run . serveApi`
-6. Send Newsletter to active subscriber - `task run -- sendNewsletter --header yourheader --body yourbody`
+6. Endpoint subscribe - /api/v1/subscribers/subscribe
+7. Endpoint unsubscribe - /api/v1/subscribers/unSubscribe 
+8. Send Newsletter to active subscriber - `task run -- sendNewsletter --header yourheader --body yourbody`
 
 
 ## config.yaml
